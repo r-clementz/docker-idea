@@ -52,10 +52,11 @@ docker build -f git-cloner.Dockerfile -t $REPO_NAME-git-cloner .
 docker run \
 --name $REPO_NAME-git-cloner \
 --mount type=bind,source="$DIRNAME/copy-to-docker-container",target=/app \
+--mount type=bind,source="$REPO_DIR",target=/repo-bind-mount \
 -v $REPO_NAME-storage:/storage \
 -e GIT_REPO_URL=$(git remote get-url origin) \
--e GIT_USERNAME=$(git config --global user.name) \
--e GIT_EMAIL=$(git config --global user.email) \
+-e GIT_USERNAME="$(git config --global user.name)" \
+-e GIT_EMAIL="$(git config --global user.email)" \
 -e GIT_REPO_NAME=$REPO_NAME \
 -e GIT_BRANCH_NAME=$BRANCH_NAME \
 $REPO_NAME-git-cloner
@@ -84,7 +85,7 @@ echo ""
 ### that runs docker (mounted as a socket)
 ### and docker and docker compose commands inside it
 ### Run docker compose on dynamically created yml file.
-#
+
 ### Important: We mount a unix socket that makes the Docker CLI
 ### in the container use the Docker daemon on the host...
 ### unix sockets must be written with one start slash in MacOS/Linux
