@@ -34,6 +34,7 @@ chokidar.watch('/repo-bind-mount', { usePolling: true }).on('all', (event, path)
   // sync files using addDir, add, change, unlinkDir and unlink
   try {
     if (event === 'addDir') {
+      fs.existsSync(to) && fs.rmSync(to, { recursive: true, force: true });
       fs.mkdirSync(to);
     }
     if (event === 'add' || event === 'change') {
