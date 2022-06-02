@@ -11,7 +11,9 @@ const chokidar = require('chokidar');
 //
 // For all of you bash kids: this is basically rsync deluxe :)
 //
-chokidar.watch('/repo-bind-mount').on('all', (event, path) => {
+// NOTE: usePolling is highly inefficient but needed on Windows hosts
+//
+chokidar.watch('/repo-bind-mount', { usePolling: true }).on('all', (event, path) => {
   // get the current branch
   let branch = fs.readFileSync('/repo-bind-mount/.git/HEAD', 'utf-8').split('/').pop().trim();
   // the current branch is bind mounted here
