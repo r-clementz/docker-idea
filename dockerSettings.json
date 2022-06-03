@@ -1,14 +1,14 @@
 [
-  "dev-frontend",
-  [
-    4001
-  ],
-  "main-frontend",
-  [
-    4000
-  ],
   "capital-info-main",
   [
     4002
+  ],
+  "iframe-server",
+  [
+    4003
+  ],
+  "iframe-reverseproxy",
+  [
+    4004
   ]
 ]
