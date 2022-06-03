@@ -10,5 +10,11 @@
   "capital-info-main",
   [
     4002
+  ],
+  "iframe-server",[
+    4003
+  ],
+  "iframe-reverseproxy",[
+    4004
   ]
 ]
