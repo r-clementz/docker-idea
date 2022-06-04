@@ -182,7 +182,7 @@ function buildComposeFile() {
       // port of the service
       let a = fs.readFileSync(dfilepath, 'utf-8');
       console.log("BEFORE REPLACE", a);
-      a.replace(/\$PORT/g, port);
+      a = a.replace(/\$PORT/g, port);
       console.log("AFTER REPLACE", a);
       fs.writeFileSync(dfilepath, a, 'utf-8');
 
