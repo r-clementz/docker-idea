@@ -6,12 +6,11 @@ const {
   GIT_BRANCH_NAME: gitBranchName,
   GIT_REPO_URL: gitRepoUrl,
   GIT_USERNAME: gitUsername,
-  GIT_EMAIL: gitEmail,
-  HOST_REPO_PATH: hostRepoPath
+  GIT_EMAIL: gitEmail
 } = process.env;
 
 const gitRepoSsh = 'git@github.com:'
-  + gitRepoUrl.split('github.com/')[1];
+  + gitRepoUrl.split(':').join('/').split('github.com/')[1];
 
 const dockerSettings = readAndParseDockerSettings();
 
@@ -173,16 +172,20 @@ function buildComposeFile() {
   for (let { branch, hostPort, port } of dockerSettings) {
 
     // for now use the hostPort (if it exists) as internal port
-    // the vite developer server gets confused otherwise
-    // looking for a solution to this
+    // the vite developer server gets confused otherwise...
     port = hostPort || port;
 
-    if (fs.existsSync(`/storage/branches/${branch}/Dockerfile`)) {
-      let bind = gitBranchName === branch
-      let name = gitRepoName + '-' + (
-        bind ? `bind-mounted-${branch}` : branch
-      );
-      let workingDir = bind ? `/hostRepo` : `/storage/branches/${branch}`;
+    let dfilepath = `/storage/branches/${branch}/Dockerfile`;
+    if (fs.existsSync(dfilepath)) {
+
+      // Replace $PORT in Dockerfile to make it easier to set the
+      // port of the service
+      let a = fs.readFileSync(dfilepath, 'utf-8');
+      a = a.replace(/\$PORT/g, port);
+      fs.writeFileSync(dfilepath, a, 'utf-8');
+
+      let name = gitRepoName + '-' + branch;
+      let workingDir = `/storage/branches/${branch}`;
       yml = [
         ...yml,
         `  ${branch}:`,
@@ -192,13 +195,7 @@ function buildComposeFile() {
         `    ports:`,
         `      - "${hostPort}:${port}"`,
         `    volumes:`,
-        ...(bind ? [
-          `      - type: bind`,
-          `        source: ${hostRepoPath}`,
-          `        target: /hostRepo`
-        ] : [
-          `      - ${gitRepoName}-storage:/storage`
-        ]),
+        `      - ${gitRepoName}-storage:/storage`,
         `    environment:`,
         `       PORT: ${port}`
       ];
