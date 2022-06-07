@@ -1,26 +1,23 @@
 [
-  "world-map-main-no-proxy",
+  "world-map-main",
   [
-    4000
+    5000
   ],
-  "country-info",
+  "country-info-main",
   [
-    4001
+    6000
   ],
-  "country-info-db",
+
+  "capital-info-main",
   [
-    4002
+    7000
   ],
-  "country-city-info",
+  "iframe-reverseproxy",
   [
-    4003
+    8000
   ],
-  "country-city-db",
+  "iframe-server",
   [
-    4004
-  ],
-  "app-iframe-no-reverseproxy",
-  [
-    4006
+    80
   ]
 ]
