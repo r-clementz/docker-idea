@@ -7,17 +7,16 @@
   [
     6000
   ],
-
   "capital-info-main",
   [
     7000
   ],
   "iframe-reverseproxy",
   [
-    8000
+    80
   ],
   "iframe-server",
   [
-    80
+    9000
   ]
 ]
